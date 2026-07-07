@@ -1,6 +1,6 @@
-package com.aditya.user_service.dto;
+package com.aditya.task_service.dtos;
 
-import com.aditya.user_service.entity.enums.Roles;
+import com.aditya.task_service.entity.enums.Roles;
 import lombok.Data;
 
 @Data

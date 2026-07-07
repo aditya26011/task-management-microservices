@@ -3,6 +3,7 @@ package com.aditya.user_service.controller;
 import com.aditya.user_service.dto.CreateUserRequest;
 import com.aditya.user_service.dto.UserAuthDto;
 import com.aditya.user_service.dto.UserResponseDto;
+import com.aditya.user_service.dto.UserSummaryDto;
 import com.aditya.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,12 @@ public class InternalUserController {
     @GetMapping("/internal/users/{id}")
     public UserAuthDto getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
+    }
+
+    @GetMapping("/{id}/summary")
+    public UserSummaryDto getUserByIdSummary(@PathVariable("id") Long id) {
+        System.out.println("Inside User Service");
+
+        return userService.getUserByIdSummary(id);
     }
 }

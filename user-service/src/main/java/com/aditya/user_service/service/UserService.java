@@ -158,4 +158,16 @@ public class UserService {
         }
 
     }
+
+    public UserSummaryDto getUserByIdSummary(Long id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        UserSummaryDto userSummaryDto=new UserSummaryDto();
+        userSummaryDto.setId(user.getId());
+        userSummaryDto.setName(user.getName());
+        userSummaryDto.setRole(user.getRole());
+        userSummaryDto.setTeamId(user.getTeam().getId());
+        return userSummaryDto;
+    }
 }

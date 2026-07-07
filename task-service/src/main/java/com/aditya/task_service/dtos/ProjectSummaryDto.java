@@ -1,4 +1,4 @@
-package com.aditya.project_service.dto;
+package com.aditya.task_service.dtos;
 
 import lombok.Data;
 
