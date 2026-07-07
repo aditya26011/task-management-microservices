@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -72,12 +72,12 @@ public class UserController {
     }
 
 
-//    @PatchMapping("/{id}/assign-team")
-//    public ResponseEntity<UserResponseDto> addEmpToTeam(@RequestBody AddTeamDto addTeamDto,
-//                                                        @PathVariable("id")Long id){
-//
-//        UserResponseDto updatedUser=userService.addEmpToTeam(addTeamDto,id);
-//        return ResponseEntity.ok(updatedUser);
-//
-//    }
+    @PatchMapping("/{id}/assign-team")
+    public ResponseEntity<UserResponseDto> addEmpToTeam(@RequestBody AddTeamDto addTeamDto,
+                                                        @PathVariable("id")Long id){
+
+        UserResponseDto updatedUser=userService.addEmpToTeam(addTeamDto,id);
+        return ResponseEntity.ok(updatedUser);
+
+    }
 }

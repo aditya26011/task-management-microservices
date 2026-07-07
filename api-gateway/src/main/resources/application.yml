@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: api-gateway
@@ -13,12 +16,24 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/users/**,/teams/**
+            - Path=/users/**
+
+        - id: teams-route
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/teams/**
+
+        - id: project-service
+          uri: lb://PROJECT-SERVICE
+          predicates:
+            - Path=/projects/**
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-server:
-  port: 8080
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    reactor.netty: DEBUG

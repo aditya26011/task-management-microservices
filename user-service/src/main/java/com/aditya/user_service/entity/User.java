@@ -33,8 +33,8 @@ public class User {
     @CreationTimestamp
     private LocalDateTime created_at;
 
-//    @ManyToOne
-//    @JoinColumn(name = "team_id")
-//    private Team team; //fk team cannot exist without user
-//
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team; //fk team cannot exist without user
+
 }

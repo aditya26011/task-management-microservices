@@ -3,11 +3,14 @@ package com.aditya.user_service.service;
 
 import com.aditya.user_service.dto.*;
 import com.aditya.user_service.dto.pagination.PageResponse;
+import com.aditya.user_service.entity.Team;
 import com.aditya.user_service.entity.User;
 import com.aditya.user_service.entity.enums.Roles;
 import com.aditya.user_service.exceptions.AdminRoleException;
+import com.aditya.user_service.exceptions.InvalidRequestException;
 import com.aditya.user_service.exceptions.ResourceNotFoundException;
 import com.aditya.user_service.exceptions.UserAlreadyExistsException;
+import com.aditya.user_service.repo.TeamRepo;
 import com.aditya.user_service.repo.UserRepo;
 import com.aditya.user_service.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +29,7 @@ public class UserService {
 
     private final UserRepo userRepo;
     private final ModelMapper modelMapper;
-//    private final TeamRepo teamRepo;
+    private final TeamRepo teamRepo;
 
 
 //    public UserDto createEmployee(UserDto userDto) {
@@ -142,17 +145,17 @@ public class UserService {
         return modelMapper.map(user, UserAuthDto.class);
     }
 
-//    public UserResponseDto addEmpToTeam(AddTeamDto addTeamDto, Long id) {
-//      User user= userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("User with Id not found"));
-//        Team team = teamRepo.findById(addTeamDto.getTeamId()).orElseThrow(()-> new ResourceNotFoundException("Team Not found"));
-//        if(user.getRole()!=Roles.ADMIN){
-//            user.setTeam(team);
-//            User savedUser = userRepo.save(user);
-//
-//            return modelMapper.map(savedUser,UserResponseDto.class);
-//        }else{
-//            throw new InvalidRequestException("Admin can't be added to any team");
-//        }
-//
-//    }
+    public UserResponseDto addEmpToTeam(AddTeamDto addTeamDto, Long id) {
+      User user= userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("User with Id not found"));
+        Team team = teamRepo.findById(addTeamDto.getTeamId()).orElseThrow(()-> new ResourceNotFoundException("Team Not found"));
+        if(user.getRole()!=Roles.ADMIN){
+            user.setTeam(team);
+            User savedUser = userRepo.save(user);
+
+            return modelMapper.map(savedUser,UserResponseDto.class);
+        }else{
+            throw new InvalidRequestException("Admin can't be added to any team");
+        }
+
+    }
 }
