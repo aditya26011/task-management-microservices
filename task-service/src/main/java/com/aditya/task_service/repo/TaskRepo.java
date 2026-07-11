@@ -1,6 +1,7 @@
 package com.aditya.task_service.repo;
 
 
+import com.aditya.task_service.auth.AuthUser;
 import com.aditya.task_service.entity.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,6 @@ import java.util.List;
 
 @Repository
 public interface TaskRepo extends JpaRepository<Task,Long>, JpaSpecificationExecutor<Task> {
-//    List<Task> findByAssignedUser(User loggedInUser);
+    List<Task> findByAssignedUserId(Long assignedUserId);
     Page<Task> findAll(Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.aditya.task_service.service;
 
 
+import com.aditya.task_service.auth.AuthUser;
 import com.aditya.task_service.client.ProjectClient;
 import com.aditya.task_service.client.UserClient;
 import com.aditya.task_service.dtos.*;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -218,14 +221,14 @@ public class TaskService {
             }
     }
 
-//    public List<UserTaskDto> getMyTasks() {
-//        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-//
-//        User loggedInUser= (User) authentication.getPrincipal();
-//       List<Task> taskList= taskRepo.findByAssignedUser(loggedInUser);
-//      return taskList.stream().map(this::mapUserTasks).toList();
-//
-//    }
+    public List<UserTaskDto> getMyTasks() {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+
+        AuthUser loggedInUser= (AuthUser) authentication.getPrincipal();
+       List<Task> taskList= taskRepo.findByAssignedUserId(loggedInUser.getId());
+      return taskList.stream().map(this::mapUserTasks).toList();
+
+    }
     private UserTaskDto mapUserTasks(Task task){
         UserTaskDto userTaskDto=new UserTaskDto();
         userTaskDto.setDescription(task.getDescription());
