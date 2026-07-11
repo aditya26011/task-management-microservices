@@ -39,6 +39,7 @@ public class UserController {
                 Sort.by(sortBy).ascending();
 
         Pageable pageable= PageRequest.of(pageNo,pageSize,sort);
+        System.out.println("inside controller");
         return new ResponseEntity<>(userService.getAll(roles,teamId,pageable),HttpStatus.OK);
     }
 

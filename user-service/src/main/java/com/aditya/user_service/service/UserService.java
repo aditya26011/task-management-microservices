@@ -51,7 +51,7 @@ public class UserService {
 //    }
 
     public PageResponse<UserResponseDto> getAll(Roles roles, Long teamId, Pageable pageable) {
-
+        System.out.println("Inside Service");
         Specification<User> specification=Specification.unrestricted();
         if(roles!=null){
             specification=specification.and(UserSpecification.hasRole(roles));

@@ -1,6 +1,7 @@
-package com.aditya.auth_service.service;
+package com.aditya.user_service.service;
 
-import com.aditya.auth_service.Auth.AuthUser;
+import com.aditya.user_service.auth.AuthUser;
+import com.aditya.user_service.entity.enums.Roles;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -40,21 +41,24 @@ public class JwtService {
                 .compact();
     }
 
-    public Long getUserIdFromToken(String token){
-        return Long.valueOf(getClaims(token).getSubject());
-    }
-    public String getRoleFromToken(String token) {
-        return getClaims(token).get("role", String.class);
-    }
-    public String getEmailFromToken(String token) {
-        return getClaims(token).get("email", String.class);
+    public Claims getClaims(String token){
+        return Jwts.parser().verifyWith(getSecretKey()).build().parseSignedClaims(token).getPayload();
     }
 
-    private Claims getClaims(String token){
-        return Jwts.parser()
-                .verifyWith(getSecretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+    public AuthUser getAuthUserFromToken(String token) {
+        Claims claims = getClaims(token);
+        String email = claims.get("email", String.class);
+        String role = claims.get("role", String.class);
+        Long id = Long.valueOf(claims.getSubject());
+
+        AuthUser authUser = new AuthUser(
+                id,
+                email,
+                Roles.valueOf(role)
+        );
+
+
+
+        return authUser;
     }
 }
