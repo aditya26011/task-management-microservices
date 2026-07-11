@@ -5,7 +5,7 @@ import com.aditya.project_service.dto.ProjectRequestDto;
 import com.aditya.project_service.dto.ProjectResponseDto;
 import com.aditya.project_service.dto.UpdateProjectDto;
 import com.aditya.project_service.dto.pagination.PageResponse;
-import com.aditya.project_service.entity.Enums.Status;
+import com.aditya.project_service.entity.enums.Status;
 import com.aditya.project_service.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

@@ -1,7 +1,7 @@
 package com.aditya.project_service.specification;
 
 
-import com.aditya.project_service.entity.Enums.Status;
+import com.aditya.project_service.entity.enums.Status;
 import com.aditya.project_service.entity.Project;
 import org.springframework.data.jpa.domain.Specification;
 

@@ -8,7 +8,7 @@ import com.aditya.project_service.dto.ProjectResponseDto;
 import com.aditya.project_service.dto.TeamSummaryDto;
 import com.aditya.project_service.dto.UpdateProjectDto;
 import com.aditya.project_service.dto.pagination.PageResponse;
-import com.aditya.project_service.entity.Enums.Status;
+import com.aditya.project_service.entity.enums.Status;
 import com.aditya.project_service.entity.Project;
 import com.aditya.project_service.exceptions.ResourceNotFoundException;
 import com.aditya.project_service.repo.ProjectRepo;

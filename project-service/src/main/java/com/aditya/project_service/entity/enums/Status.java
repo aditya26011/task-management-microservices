@@ -1,4 +1,4 @@
-package com.aditya.project_service.entity.Enums;
+package com.aditya.project_service.entity.enums;
 
 public enum Status {
     PLANNING,

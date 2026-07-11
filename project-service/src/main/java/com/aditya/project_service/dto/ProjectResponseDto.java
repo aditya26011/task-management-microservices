@@ -1,7 +1,7 @@
 package com.aditya.project_service.dto;
 
 
-import com.aditya.project_service.entity.Enums.Status;
+import com.aditya.project_service.entity.enums.Status;
 import lombok.Data;
 
 import java.sql.Timestamp;
