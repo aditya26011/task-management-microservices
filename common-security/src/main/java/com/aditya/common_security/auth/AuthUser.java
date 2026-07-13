@@ -1,9 +1,9 @@
-package com.aditya.project_service.auth;
+package com.aditya.common_security.auth;
 
 
 
 
-import com.aditya.project_service.entity.enums.Roles;
+import com.aditya.common_security.enums.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

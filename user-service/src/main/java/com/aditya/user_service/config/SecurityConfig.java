@@ -1,6 +1,6 @@
 package com.aditya.user_service.config;
 
-import com.aditya.user_service.filter.JwtFilter;
+import com.aditya.common_security.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

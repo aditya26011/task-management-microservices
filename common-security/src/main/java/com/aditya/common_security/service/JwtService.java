@@ -1,8 +1,8 @@
-package com.aditya.project_service.service;
+package com.aditya.common_security.service;
 
 
-import com.aditya.project_service.auth.AuthUser;
-import com.aditya.project_service.entity.enums.Roles;
+import com.aditya.common_security.auth.AuthUser;
+import com.aditya.common_security.enums.Roles;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

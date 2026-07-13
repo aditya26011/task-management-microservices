@@ -1,7 +1,8 @@
 package com.aditya.task_service.service;
 
 
-import com.aditya.task_service.auth.AuthUser;
+
+import com.aditya.common_security.auth.AuthUser;
 import com.aditya.task_service.client.ProjectClient;
 import com.aditya.task_service.client.UserClient;
 import com.aditya.task_service.dtos.*;
@@ -222,12 +223,28 @@ public class TaskService {
     }
 
     public List<UserTaskDto> getMyTasks() {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
 
-        AuthUser loggedInUser= (AuthUser) authentication.getPrincipal();
-       List<Task> taskList= taskRepo.findByAssignedUserId(loggedInUser.getId());
-      return taskList.stream().map(this::mapUserTasks).toList();
+        System.out.println("Inside service");
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authentication---" + authentication);
+
+        Object principal = authentication.getPrincipal();
+        System.out.println("Principal Class = " + principal.getClass());
+        System.out.println("Principal = " + principal);
+
+        System.out.println("Before Cast");
+
+        AuthUser loggedInUser = (AuthUser) principal;
+
+        System.out.println("After Cast");
+        System.out.println("User Id = " + loggedInUser.getId());
+
+        List<Task> taskList = taskRepo.findByAssignedUserId(loggedInUser.getId());
+
+        System.out.println("Tasks Found = " + taskList.size());
+
+        return taskList.stream().map(this::mapUserTasks).toList();
     }
     private UserTaskDto mapUserTasks(Task task){
         UserTaskDto userTaskDto=new UserTaskDto();

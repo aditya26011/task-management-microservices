@@ -1,6 +1,6 @@
 package com.aditya.task_service.config;
 
-import com.aditya.task_service.filter.JwtFilter;
+import com.aditya.common_security.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,6 @@
 package com.aditya.task_service.repo;
 
 
-import com.aditya.task_service.auth.AuthUser;
 import com.aditya.task_service.entity.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
