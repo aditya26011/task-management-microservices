@@ -3,6 +3,7 @@ package com.aditya.task_service.service;
 
 
 import com.aditya.common_security.auth.AuthUser;
+import com.aditya.task_service.client.NotificationClient;
 import com.aditya.task_service.client.ProjectClient;
 import com.aditya.task_service.client.UserClient;
 import com.aditya.task_service.dtos.*;
@@ -33,6 +34,7 @@ public class TaskService {
     private final TaskRepo taskRepo;
     private final UserClient userClient;
     private final ProjectClient projectClient;
+    private final NotificationClient notificationClient;
 //    private final UserRepo userRepo;
 //    private final ProjectRepo projectRepo;
 
@@ -60,9 +62,25 @@ public class TaskService {
         task.setAssignedUserId(user.getId());
 
         Task savedTask=taskRepo.save(task);
-        System.out.println("Saved ID = " + savedTask.getId());
-        Task check = taskRepo.findById(savedTask.getId()).orElse(null);
-        System.out.println(check);
+
+        try {
+            NotificationDto notificationDto = new NotificationDto();
+            notificationDto.setEmail(user.getEmail());
+            notificationDto.setSubject("Task Assigned: " + savedTask.getTitle());
+            notificationDto.setMessage(
+                    "Hello " + user.getName() + ",\n\n" +
+                            "You have been assigned a new task.\n\n" +
+                            "Title: " + savedTask.getTitle() + "\n" +
+                            "Description: " + savedTask.getDescription() + "\n" +
+                            "Due Date: " + savedTask.getDueDate() + "\n\n" +
+                            "Regards,\nTask Management System"
+            );
+
+            notificationClient.sendEmail(notificationDto);
+
+        } catch (Exception e) {
+            System.out.println("Failed to send notification"+ e);
+        }
 
         TaskResponseDto taskResponseDto = getTaskResponseDto(savedTask,user,project);
 

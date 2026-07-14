@@ -167,6 +167,7 @@ public class UserService {
         userSummaryDto.setId(user.getId());
         userSummaryDto.setName(user.getName());
         userSummaryDto.setRole(user.getRole());
+        userSummaryDto.setEmail(user.getEmail());
         userSummaryDto.setTeamId(user.getTeam().getId());
         return userSummaryDto;
     }

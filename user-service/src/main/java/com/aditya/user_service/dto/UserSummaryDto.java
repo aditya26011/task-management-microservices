@@ -9,4 +9,5 @@ public class UserSummaryDto {
     private String name;
     private Roles role;
     private Long teamId;
+    private String email;
 }
