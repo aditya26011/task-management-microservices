@@ -22,7 +22,7 @@ public class NotificationController {
     @PostMapping("/send")
     ResponseEntity<String> sendNotification(@RequestBody NotificationDto request){
         System.out.println("Inside controller");
-            notificationsService.send(request.getEmail(),request.getSubject(),request.getMessage());
+            notificationsService.send(request);
         return new ResponseEntity<>("Sent Successfully", HttpStatus.OK);
     }
 }

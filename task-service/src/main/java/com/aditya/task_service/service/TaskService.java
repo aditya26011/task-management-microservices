@@ -68,13 +68,14 @@ public class TaskService {
             notificationDto.setEmail(user.getEmail());
             notificationDto.setSubject("Task Assigned: " + savedTask.getTitle());
             notificationDto.setMessage(
-                    "Hello " + user.getName() + ",\n\n" +
+                             "Hello " + user.getName() + ",\n\n" +
                             "You have been assigned a new task.\n\n" +
                             "Title: " + savedTask.getTitle() + "\n" +
                             "Description: " + savedTask.getDescription() + "\n" +
                             "Due Date: " + savedTask.getDueDate() + "\n\n" +
                             "Regards,\nTask Management System"
             );
+            notificationDto.setUserId(savedTask.getAssignedUserId());
 
             notificationClient.sendEmail(notificationDto);
 

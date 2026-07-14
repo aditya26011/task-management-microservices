@@ -7,4 +7,5 @@ public class NotificationDto {
     private String email;
     private String subject;
     private String message;
+    private Long userId;
 }

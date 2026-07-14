@@ -1,9 +1,14 @@
 package com.aditya.notification_service.service;
 
+import com.aditya.notification_service.dto.NotificationDto;
+import com.aditya.notification_service.entity.Notification;
+import com.aditya.notification_service.repo.NotificationRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -11,13 +16,21 @@ public class NotificationsService {
 
 
     private final JavaMailSender javaMailSender;
+    private final NotificationRepo notificationRepo;
 
-    public void send(String to, String subject, String message) {
+    public void send(NotificationDto request) {
 
         SimpleMailMessage mail=new SimpleMailMessage();
-        mail.setTo(to);
-        mail.setSubject(subject);
-        mail.setText(message);
+        mail.setTo(request.getEmail());
+        mail.setSubject(request.getSubject());
+        mail.setText(request.getMessage());
+
+        Notification notification=new Notification();
+        notification.setSubject(request.getSubject());
+        notification.setMessage(request.getMessage());
+        notification.setUserId(request.getUserId());
+        notification.setCreatedAt(LocalDateTime.now());
+        notificationRepo.save(notification);
 
         javaMailSender.send(mail);
     }
