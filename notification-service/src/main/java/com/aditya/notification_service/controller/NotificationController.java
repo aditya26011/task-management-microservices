@@ -17,12 +17,12 @@ import static org.bouncycastle.internal.asn1.iana.IANAObjectIdentifiers.mail;
 @RequiredArgsConstructor
 public class NotificationController {
 
-    private final NotificationsService notificationsService;
-
-    @PostMapping("/send")
-    ResponseEntity<String> sendNotification(@RequestBody NotificationDto request){
-        System.out.println("Inside controller");
-            notificationsService.send(request);
-        return new ResponseEntity<>("Sent Successfully", HttpStatus.OK);
-    }
+//    private final NotificationsService notificationsService;
+//
+//    @PostMapping("/send")
+//    ResponseEntity<String> sendNotification(@RequestBody NotificationDto request){
+//        System.out.println("Inside controller");
+//            notificationsService.send(request);
+//        return new ResponseEntity<>("Sent Successfully", HttpStatus.OK);
+//    }
 }

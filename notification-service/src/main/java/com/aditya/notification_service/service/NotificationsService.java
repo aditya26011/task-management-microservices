@@ -4,6 +4,7 @@ import com.aditya.notification_service.dto.NotificationDto;
 import com.aditya.notification_service.entity.Notification;
 import com.aditya.notification_service.repo.NotificationRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class NotificationsService {
     private final JavaMailSender javaMailSender;
     private final NotificationRepo notificationRepo;
 
+    @KafkaListener(topics = "task-created")
     public void send(NotificationDto request) {
 
         SimpleMailMessage mail=new SimpleMailMessage();

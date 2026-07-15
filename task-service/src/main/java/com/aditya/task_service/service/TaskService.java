@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,15 +36,13 @@ public class TaskService {
     private final UserClient userClient;
     private final ProjectClient projectClient;
     private final NotificationClient notificationClient;
-//    private final UserRepo userRepo;
-//    private final ProjectRepo projectRepo;
+    private final KafkaTemplate<Long,NotificationDto> kafkaTemplate;
 
     public TaskResponseDto create(TaskRequestDto taskRequestDto)  {
 
-//       User user= userRepo.findById(taskRequestDto.getUserId()).orElseThrow(()->new ResourceNotFoundException("User with this Id is not available"));
         UserSummaryDto user=userClient.getUserByIdSummary(taskRequestDto.getUserId());
         ProjectSummaryDto project=projectClient.getProjectById(taskRequestDto.getProjectId());
-//       Project project= projectRepo.findById(taskRequestDto.getProjectId()).orElseThrow(()->new ResourceNotFoundException("Project with this Id is not possible"));
+
 
     if(user.getRole()== Roles.ADMIN){
         throw  new InvalidRequestException("Task can't be assigned to Admin");
@@ -77,7 +76,8 @@ public class TaskService {
             );
             notificationDto.setUserId(savedTask.getAssignedUserId());
 
-            notificationClient.sendEmail(notificationDto);
+            kafkaTemplate.send("task-created",notificationDto.getUserId(),notificationDto);
+//            notificationClient.sendEmail(notificationDto);
 
         } catch (Exception e) {
             System.out.println("Failed to send notification"+ e);
