@@ -3,7 +3,6 @@ package com.aditya.task_service.service;
 
 
 import com.aditya.common_security.auth.AuthUser;
-import com.aditya.task_service.client.NotificationClient;
 import com.aditya.task_service.client.ProjectClient;
 import com.aditya.task_service.client.UserClient;
 import com.aditya.task_service.dtos.*;
@@ -35,7 +34,7 @@ public class TaskService {
     private final TaskRepo taskRepo;
     private final UserClient userClient;
     private final ProjectClient projectClient;
-    private final NotificationClient notificationClient;
+//    private final NotificationClient notificationClient;
     private final KafkaTemplate<Long,NotificationDto> kafkaTemplate;
 
     public TaskResponseDto create(TaskRequestDto taskRequestDto)  {
