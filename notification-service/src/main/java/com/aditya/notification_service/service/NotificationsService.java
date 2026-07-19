@@ -19,21 +19,25 @@ public class NotificationsService {
     private final JavaMailSender javaMailSender;
     private final NotificationRepo notificationRepo;
 
-    @KafkaListener(topics = "task-created")
     public void send(NotificationDto request) {
 
         SimpleMailMessage mail=new SimpleMailMessage();
         mail.setTo(request.getEmail());
         mail.setSubject(request.getSubject());
         mail.setText(request.getMessage());
-
-        Notification notification=new Notification();
-        notification.setSubject(request.getSubject());
-        notification.setMessage(request.getMessage());
-        notification.setUserId(request.getUserId());
-        notification.setCreatedAt(LocalDateTime.now());
-        notificationRepo.save(notification);
-
+        System.out.println("Inside notification service");
+        notificationRepo.save(mapToNotification(request));
         javaMailSender.send(mail);
+    }
+
+    private Notification mapToNotification(NotificationDto dto) {
+
+        Notification notification = new Notification();
+        notification.setUserId(dto.getUserId());
+        notification.setSubject(dto.getSubject());
+        notification.setMessage(dto.getMessage());
+        notification.setCreatedAt(LocalDateTime.now());
+
+        return notification;
     }
 }

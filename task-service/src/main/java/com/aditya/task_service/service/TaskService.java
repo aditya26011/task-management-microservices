@@ -12,6 +12,7 @@ import com.aditya.task_service.entity.enums.Roles;
 import com.aditya.task_service.entity.enums.TaskStatus;
 import com.aditya.task_service.exceptions.InvalidRequestException;
 import com.aditya.task_service.exceptions.ResourceNotFoundException;
+import com.aditya.task_service.kafka.NotificationProducer;
 import com.aditya.task_service.pagination.PageResponse;
 import com.aditya.task_service.repo.TaskRepo;
 import com.aditya.task_service.specification.TaskSpecification;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +36,9 @@ public class TaskService {
     private final TaskRepo taskRepo;
     private final UserClient userClient;
     private final ProjectClient projectClient;
-//    private final NotificationClient notificationClient;
-    private final KafkaTemplate<Long,NotificationDto> kafkaTemplate;
+
+    private final NotificationProducer notificationProducer;
+
 
     public TaskResponseDto create(TaskRequestDto taskRequestDto)  {
 
@@ -61,30 +64,30 @@ public class TaskService {
 
         Task savedTask=taskRepo.save(task);
 
-        try {
-            NotificationDto notificationDto = new NotificationDto();
-            notificationDto.setEmail(user.getEmail());
-            notificationDto.setSubject("Task Assigned: " + savedTask.getTitle());
-            notificationDto.setMessage(
-                             "Hello " + user.getName() + ",\n\n" +
-                            "You have been assigned a new task.\n\n" +
-                            "Title: " + savedTask.getTitle() + "\n" +
-                            "Description: " + savedTask.getDescription() + "\n" +
-                            "Due Date: " + savedTask.getDueDate() + "\n\n" +
-                            "Regards,\nTask Management System"
-            );
-            notificationDto.setUserId(savedTask.getAssignedUserId());
+     NotificationDto notificationDto= buildNotificationDto(savedTask,user);
 
-            kafkaTemplate.send("task-created",notificationDto.getUserId(),notificationDto);
-//            notificationClient.sendEmail(notificationDto);
+      notificationProducer.publish(notificationDto);
 
-        } catch (Exception e) {
-            System.out.println("Failed to send notification"+ e);
-        }
 
         TaskResponseDto taskResponseDto = getTaskResponseDto(savedTask,user,project);
 
         return taskResponseDto;
+    }
+
+    private NotificationDto buildNotificationDto(Task task, UserSummaryDto user){
+        NotificationDto dto=new NotificationDto();
+
+        dto.setUserId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setSubject("Task Assigned: " + task.getTitle());
+        dto.setMessage("Hello " + user.getName() + ",\n\n" +
+                "You have been assigned a new task.\n\n" +
+                "Title: " + task.getTitle() + "\n" +
+                "Description: " + task.getDescription() + "\n" +
+                "Due Date: " + task.getDueDate() + "\n\n" +
+                "Regards,\nTask Management System");
+
+        return dto;
     }
 
     private static TaskResponseDto getTaskResponseDto(Task savedTask, UserSummaryDto user,ProjectSummaryDto project) {
