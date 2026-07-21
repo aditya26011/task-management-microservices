@@ -15,6 +15,7 @@ import com.aditya.user_service.repo.UserRepo;
 import com.aditya.user_service.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -81,10 +82,11 @@ public class UserService {
     @Cacheable(cacheNames="users",key ="#id")
     public UserResponseDto getEmpById(Long id) {
         User employee = userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("User Not Found"));
+        System.out.println("Called user service once:{}" + id);
         return modelMapper.map(employee, UserResponseDto.class);
 
     }
-
+    @CacheEvict(value = "users", key = "#id")
     public int deleteById(Long id) {
         boolean val = userRepo.existsById(id);
         if(val){
@@ -95,7 +97,7 @@ public class UserService {
         }
 
     }
-
+    @CacheEvict(value = "users", key = "#id")
     public UserResponseDto UpdateEmployee(UserDto userDto, Long id) {
      User user = userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("User with Id not found"));
 
@@ -106,7 +108,7 @@ public class UserService {
 
 
     }
-
+    @CacheEvict(value = "users", key = "#id")
     public UserResponseDto updateEmployeeRole(UserRoleRequestDto userRoleRequestDto, Long id) {
         User user = userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User with Id now found"));
 

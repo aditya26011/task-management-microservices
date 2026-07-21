@@ -15,6 +15,8 @@ import com.aditya.project_service.repo.ProjectRepo;
 import com.aditya.project_service.specification.ProjectSpecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -105,12 +107,14 @@ public class ProjectService {
 
     }
 
+//    @Cacheable(value = "projects", key = "#id")
     public ProjectResponseDto getProjectById(Long id) {
         Project project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project with Id not found"));
         TeamSummaryDto team=userClient.getTeamById(project.getTeamId());
         return mapToProjectResponseDto(project,team);
     }
 
+//    @CacheEvict(value = "projects", key = "#id")
     public ProjectResponseDto updateProject(Long id, UpdateProjectDto updateProjectDto) {
         Project project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project with Id not found"));
         if(updateProjectDto.getDescription()!=null){
@@ -133,6 +137,7 @@ public class ProjectService {
         return mapToProjectResponseDto(updated,team);
     }
 
+//    @CacheEvict(value = "projects", key = "#id")
     public boolean deleteById(Long id) {
 
         //Once task comes if project has task then we should not delete it throw excep
