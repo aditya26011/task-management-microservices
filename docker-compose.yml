@@ -1,0 +1,200 @@
+
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    restart: always
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    networks:
+      - backend
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+
+    ports:
+      - "6379:6379"
+
+    networks:
+      - backend
+
+  kafka:
+    image: apache/kafka:4.0.0
+    container_name: kafka
+    restart: always
+
+    ports:
+      - "9092:9092"
+
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+
+
+    networks:
+      - backend
+
+  service-registry:
+    build:
+      context: ./service-registry
+      dockerfile: Dockerfile
+
+    image: service-registry:latest
+    container_name: service-registry
+    restart: always
+
+    ports:
+      - "8761:8761"
+
+    networks:
+      - backend
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+
+    image: api-gateway:latest
+    container_name: api-gateway
+    restart: always
+
+    depends_on:
+      - service-registry
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - backend
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+
+    image: auth-service:latest
+    container_name: auth-service
+    restart: always
+
+    depends_on:
+      - service-registry
+
+    ports:
+      - "8082:8082"
+
+    networks:
+      - backend
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+
+    image: user-service:latest
+    container_name: user-service
+    restart: always
+
+    depends_on:
+      - postgres
+      - redis
+      - service-registry
+
+    ports:
+      - "8083:8083"
+
+    networks:
+      - backend
+
+  project-service:
+    build:
+      context: ./project-service
+      dockerfile: Dockerfile
+
+    image: project-service:latest
+    container_name: project-service
+    restart: always
+
+    depends_on:
+      - postgres
+      - redis
+      - service-registry
+
+    ports:
+      - "8081:8081"
+
+    networks:
+      - backend
+
+  task-service:
+    build:
+      context: ./task-service
+      dockerfile: Dockerfile
+
+    image: task-service:latest
+    container_name: task-service
+    restart: always
+
+    depends_on:
+      - postgres
+      - kafka
+      - service-registry
+
+    ports:
+      - "8084:8084"
+
+    networks:
+      - backend
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+
+    image: notification-service:latest
+    container_name: notification-service
+    restart: always
+
+    depends_on:
+      - postgres
+      - kafka
+      - service-registry
+
+    ports:
+      - "8085:8085"
+
+    networks:
+      - backend
+
+volumes:
+  postgres-data:
+
+networks:
+  backend:
+    driver: bridge

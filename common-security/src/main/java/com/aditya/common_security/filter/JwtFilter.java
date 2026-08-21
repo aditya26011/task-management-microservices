@@ -48,7 +48,9 @@ public class JwtFilter extends OncePerRequestFilter {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 AuthUser user=jwtService.getAuthUserFromToken(token);
-                System.out.println("User inside JWT"+ user);
+                System.out.println("User inside JWT: " + user);
+                System.out.println("Role: " + user.getRole());
+                System.out.println("Authorities: " + user.getAuthorities());
 
                 //need to set the authentication into security Context holder
                 UsernamePasswordAuthenticationToken authenticationToken

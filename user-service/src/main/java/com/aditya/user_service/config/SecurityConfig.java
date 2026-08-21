@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE")
 
                         .requestMatchers(HttpMethod.PATCH, "/users/**")
-                        .hasRole("MANAGER")
+                        .hasAnyRole("ADMIN", "MANAGER")
 
                         .requestMatchers(HttpMethod.DELETE, "/users/**")
                         .hasRole("ADMIN")
