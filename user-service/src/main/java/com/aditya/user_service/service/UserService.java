@@ -124,7 +124,7 @@ public class UserService {
     public UserAuthDto getUserByEmail(String email) {
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
 
         return modelMapper.map(user, UserAuthDto.class);
     }
@@ -142,7 +142,7 @@ public class UserService {
 
     public UserAuthDto getUserById(Long id) {
         User user = userRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
 
         return modelMapper.map(user, UserAuthDto.class);
     }
@@ -163,7 +163,7 @@ public class UserService {
 
     public UserSummaryDto getUserByIdSummary(Long id) {
         User user = userRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
 
         UserSummaryDto userSummaryDto=new UserSummaryDto();
         userSummaryDto.setId(user.getId());

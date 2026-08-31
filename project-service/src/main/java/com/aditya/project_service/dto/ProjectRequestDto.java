@@ -1,11 +1,13 @@
 package com.aditya.project_service.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Builder
 @Data
 public class ProjectRequestDto {
 
